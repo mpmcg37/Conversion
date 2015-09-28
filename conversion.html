@@ -172,7 +172,7 @@
       $('#help').toggle();
       console.log("Show Steps: ");
       console.log(step);
-      $('body').append('<div class="steps">');
+      $('body').append('<div class="steps">')
       step.forEach(function (item, i, array1) {
         var html = '';
         var note = ''
@@ -199,7 +199,8 @@
         if(note.length > 0){
           html = '<div class="note"">('+note+')</div>'+html;
         }
-        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>');
+        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>').hide().fadeIn(1000);
+
       });
     }
 
