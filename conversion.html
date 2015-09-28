@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <meta charset="UTF-8">
+  <title>Energy Conversion</title>
+  <style>
+    * { font-family: 'Open Sans', sans-serif; }
+
+    .content, .step {
+      text-align: center;
+      margin: auto;
+      padding: .2em;
+      border: .2em solid black;
+      margin-left: 1.5em;
+      margin-right: 1.5em;
+    }
+
+    .question, .describe, .bit, .total {
+      text-transform: capitalize;
+      font-size: 3em;
+    }
+
+    .describe form{
+      border: .05em solid black;
+      font-size: .8em;
+      padding: .2em;
+      margin-left: 1.5em;
+      margin-right: 1.5em;
+    }
+
+    .describe form label {
+      display: block;
+    }
+
+    .total {
+      text-decoration: underline;
+      font-size: 2.7em;
+    }
+
+    .note {
+      font-size: .9em;
+      font-style: italic;
+    }
+
+
+    button {
+    	-moz-box-shadow: 0px 0px 0px 0px #6b8f94;
+    	-webkit-box-shadow: 0px 0px 0px 0px #6b8f94;
+    	box-shadow: 0px 0px 0px 0px #6b8f94;
+    	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3bbceb), color-stop(1, #2f3233));
+    	background:-moz-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    	background:-webkit-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    	background:-o-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    	background:-ms-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    	background:linear-gradient(to bottom, #3bbceb 5%, #2f3233 100%);
+    	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3bbceb', endColorstr='#2f3233',GradientType=0);
+    	background-color:#3bbceb;
+    	-moz-border-radius:28px;
+    	-webkit-border-radius:28px;
+    	border-radius:28px;
+    	border:1px solid #1c70a8;
+    	cursor:pointer;
+    	color:#ffffff;
+    	text-decoration:none;
+    	text-shadow:0px 1px 0px #0a4457;
+    }
+
+    button:hover {
+    	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2f3233), color-stop(1, #3bbceb));
+    	background:-moz-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    	background:-webkit-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    	background:-o-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    	background:-ms-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    	background:linear-gradient(to bottom, #2f3233 5%, #3bbceb 100%);
+    	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2f3233', endColorstr='#3bbceb',GradientType=0);
+    	background-color:#2f3233;
+    }
+
+    button:active {
+    	position:relative;
+    	top:1px;
+    }
+
+    #answer, .kw, button, .bit, .equals, .multiply, .divide {
+      margin: .2em .3em;
+      padding:.1em .3em;
+      font-size: 2.4em;
+    }
+
+    #submit {
+      margin: auto;
+    }
+
+    .answer {
+      width: 95%;
+      display: block;
+      margin: auto;
+    }
+
+    .answer input#answer {
+      width: 50%;
+      max-width: 5em;
+    }
+
+    .answer span.kw {
+      width: 30%;
+    }
+
+    .bit, .equals, .multiply, .divide {
+      display: inline;
+    }
+
+    #title.bit {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="correct"></div>
+    <div class="total"></div>
+    <div class="describe">Select a difficulty
+      <form>
+        <label for="1"><input type="radio" name="difficulty" id="1" value="Easy" checked />
+        Easy</label>
+        <label for="2">
+        <input type="radio" name="difficulty" id="2" value="Medium" />
+        Medium</label>
+        <label for="3">
+        <input type="radio" name="difficulty" id="3" value="Hard" />
+        Hard</label>
+      </form>
+    </div>
+    <button id="gen-question">Create<span id='type'></span>Question</button>
+    <div class="question"></div>
+    <div class="answer">
+      <input id="answer" type="number" step=".001" min="0"><span class="kw">Kilowatts</span></input>
+    </div>
+      <button id="submit">Submit</button>
+      <button id="help">Show Steps</button>
+  </div>
+  <script>
+    var DIGITS = 3;
+    var answer, difficulty, wattage, time, solution, quantity = 1, units = "Hours",
+      correct = 0, attempts = 0, problems = 0, tries = 0, steps = [], step = [];
+    var t1 = 'How many Kilowatts does a <span id="watts"></span> \
+              Watt Lightbulb use in <span id="time"></span> \
+              <span id="units"></span>?',
+        t3 = 'How many Kilowatts do <span id="quantity"></span> \
+              <span id="watts"></span> Watt Lightbulbs use in \
+              <span id="time"></span> <span id="units"></span>?';
+
+    $(function() {
+      $( "#gen-question" ).click(genQuestion);
+      $('#help').click(showSteps);
+      $( "#submit" ).click(getAnswer);
+      $('input:radio[name=difficulty]').click(function() {
+        $('#type').text(getDifficulty());
+      });
+      $('#type').text(getDifficulty());
+      $( "input#answer" ).keyup(function(e) {
+        if ( e.which == 13 ) {
+          getAnswer();
+        }
+      });
+      setAttemptedCompleted();
+    });
+
+    function showSteps(){
+      $('#help').toggle();
+      console.log("Show Steps: ");
+      console.log(step);
+      $('body').append('<div class="steps">');
+      step.forEach(function (item, i, array1) {
+        var html = '';
+        var note = ''
+        if(item.length>6){
+          note = item.pop();
+        }
+        item.forEach(function(bit, j, array2){
+          if(j==1){
+            return;
+          }
+          if(j>0){
+            if (j<array2.length-2){
+              if(item[1].indexOf('/') != -1){
+                bit += '<div class="divide">/</div>';
+              } else if(item[1].indexOf('*') != -1) {
+                bit += '<div class="multiply">*</div>';
+              }
+            }else if (j==array2.length-2) {
+              bit += '<div class="equals">=</div>';
+            }
+          }
+          html += '<div class="bit" id="'+ (j == 0 ? 'title' : j) +'"> ' +bit+ '</div>';
+        });
+        if(note.length > 0){
+          html = '<div class="note"">('+note+')</div>'+html;
+        }
+        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>');
+      });
+    }
+
+    function setAttemptedCompleted() {
+      if(attempts > 0) {
+        $('.correct').text('Correct: '+ (correct/attempts).toFixed(2) * 100 +'%');
+      }
+      if(problems > 0) {
+        $('.total').text('Question #'+problems);
+      }
+      if(tries>0){
+        $('#help').show();
+      }else {
+        $('#help').hide();
+      }
+    }
+
+    function getAnswer() {
+      setAttemptedCompleted();
+      answer = parseFloat( $( "input#answer" ).val() ).toFixed(DIGITS);
+      if(answer > 0) { showSolution(); }
+    }
+
+    function genQuestion() {
+      step = [];
+      $( "input#answer" ).val('');
+      $('.steps').remove();
+      problems++;
+      tries = 0;
+      setAttemptedCompleted();
+      var html = t1;
+      switch(difficulty) {
+        case 'Easy':
+          $('.question').html(t1);
+          break;
+        case 'Medium':
+          $('.question').html(t3);
+          randomQuantity();
+          break;
+        case 'Hard':
+          $('.question').html(t3);
+          randomQuantity();
+          randomUnits(randomNum(1, 4, 1));
+          break;
+        default:
+          break;
+      }
+      randomWattage();
+      randomTime();
+      genSolution();
+    }
+
+    function randomQuantity() {
+      quantity = randomNum(2, 99, 1);
+      $('#quantity').text(stringifyNumber(quantity));
+      return quantity;
+    }
+
+    function genSolution() {
+      solution = calcSolution(wattage, time);
+      step.push(['Answer', '=', solution]);
+    }
+
+    function convertTime(t) {
+      var r = t;
+      switch(units) {
+        case 'Days':
+          r = 24 * t;
+          step.push(['Convert Days to Hours', '*', t, 24, r.toFixed(DIGITS)]);
+          break;
+        case 'Weeks':
+          r = 7 * 24 * t;
+          step.push(['Convert Weeks to Hours', '*', t, 7, 24, r.toFixed(DIGITS)]);
+          break;
+        case 'Months':
+          r = 30 * 24 * t;
+          step.push(['Convert Months to Hours', '*', t, 30, 24, r.toFixed(DIGITS), 'Assume 30 days per month']);
+          break;
+        case 'Years':
+          r = 365.25 * 24 * t;
+          step.push(['Convert Years to Hours', '*', t, 365.25, 24, r.toFixed(DIGITS), 'Approximate 365.25 days per year']);
+          break;
+        default:
+          break;
+      }
+      return r;
+    }
+
+    function stringifyNumber(n) {
+      var s = '';
+      if(n<20) {
+        var num = n.toString(10);
+        s = tens(num);
+      } else {
+        var a_Nums = n.toString(10).split('').reverse();
+        for(var i = a_Nums.length - 1; i >= 0; i--) {
+          s += cToDigits(a_Nums[i],i) + (i==0 ? '' : ' ');
+        }
+      }
+      return n%10 == 0 ? s : s.replace(' ', '-');
+    }
+
+    function cToDigits(n, digits) {
+      var s;
+      switch(digits) {
+        case 0:
+          s = tens(n);
+          break;
+        case 1:
+          s = hundreds(n);
+          break;
+        default:
+          s = 'zero';
+          break;
+        }
+        return s;
+    }
+
+    function tens(n) {
+      var s = '';
+      switch(n){
+        case '1':
+          s = 'one';
+          break;
+        case '2':
+          s = 'two';
+          break;
+        case '3':
+          s = 'three';
+          break;
+        case '4':
+            s = 'four';
+            break;
+        case '5':
+            s = 'five';
+            break;
+        case '6':
+            s = 'six';
+            break;
+        case '7':
+            s = 'seven';
+            break;
+        case '8':
+          s = 'eight';
+          break
+        case '9':
+          s = 'nine';
+          break;
+        case '10':
+          s = 'ten';
+          break;
+        case '11':
+          s = 'eleven';
+          break;
+        case '12':
+          s = 'twelve';
+          break;
+        case '13':
+          s = 'thirteen';
+          break;
+        case '15':
+          s = 'fifteen';
+          break;
+        case '18':
+          s = 'eighteen';
+          break;
+        case '14':
+        case '16':
+        case '17':
+        case '19':
+          s = tens(n.charAt(1))+'teen';
+          break;
+        default:
+          break;
+      }
+      return s;
+    }
+
+    function hundreds(n) {
+      var s ='';
+      switch(n){
+        case '2':
+          s = 'twenty';
+          break;
+        case '3':
+          s = 'thirty';
+          break;
+        case '4':
+            s = 'forty';
+            break;
+        case '5':
+            s = 'fifty';
+            break;
+        case '6':
+        case '7':
+        case '9':
+          s = tens(n)+'ty';
+          break;
+        case '8':
+          s = 'eighty';
+          break;
+        default:
+          break;
+      }
+      return s;
+    }
+
+    function getDifficulty() {
+      difficulty = $('input:radio[name=difficulty]:checked').val();
+      units = "Hours";
+      return ' '+difficulty+' ';
+    }
+
+    function calcSolution(w, t) {
+      var cKw = wToKw(w);
+      var cTime = convertTime(time);
+      var sol = ( cKw *cTime ).toFixed(DIGITS);
+      step.push(['Multiply Hours by Wattage', '*', cTime, cKw, sol]);
+      return sol;
+    }
+
+    function wToKw(w) {
+      var kw = w/1000;
+      var tKW = (kw*quantity).toFixed(DIGITS);
+      step.push(['Convert Watts to Kilowatts', '/', w, 1000, kw]);
+      if(quantity > 1){
+        step.push(['Multiply by the number of Lightbulbs', '*', kw, quantity, tKW]);
+      }
+      return tKW;
+    }
+
+    function randomWattage() {
+      wattage = randomNum(10, 23, 5);
+      $('#watts').text(wattage);
+      return wattage;
+    }
+
+    function randomNum(min, max, stepSize) { return Math.floor(Math.random() * max) * stepSize + min; }
+
+    function randomUnits(n) {
+      switch(n) {
+        case 1:
+          units = 'Days';
+          break;
+        case 2:
+          units = 'Weeks';
+          break;
+        case 3:
+          units = 'Months';
+          break;
+        case 4:
+          units = 'Years';
+          break;
+        default:
+          units = 'Hours';
+          break;
+      }
+      return units;
+    }
+
+    function randomTime() {
+      switch(units) {
+        case 'Days':
+          time = randomNum(1, 7, 1);
+          break;
+        case 'Weeks':
+          time = randomNum(1, 8, 1);
+          break;
+        case 'Months':
+          time = randomNum(1, 12, 1);
+          break;
+        case 'Years':
+          time = randomNum(1, 100, 1);
+          break
+        default:
+          time = randomNum(1, 24, 1);
+          break;
+      }
+      if(time === 1) {
+        units = units.replace('s','');
+      } else if (units.indexOf('s') == -1) {
+        units += 's';
+      }
+      $('#units').text(units);
+      $('#time').text(stringifyNumber(time));
+      return time;
+    }
+
+    function isSolutionPartOfAnswer(){ return answer.toString().replace('.','').indexOf((solution*1000).toString()) != -1; }
+
+    function showSolution() {
+      if(solution && answer) {
+        steps.push(step);
+        attempts++; tries++;
+        if(solution == answer) {
+          correct++;
+          $( "#gen-question" ).click();
+        } else if (isSolutionPartOfAnswer()) {
+          alert("So close! Did you convert Watts to Kilowatts?");
+        } else {
+          alert('Your Answer is: '+answer+'\n The Answer is: '+solution+' KW');
+        }
+      }
+      setAttemptedCompleted();
+    }
+  </script>
+</body>
+</html>
