@@ -26,8 +26,9 @@
       border: .05em solid black;
       font-size: .8em;
       padding: .2em;
-      margin-left: 1.5em;
-      margin-right: 1.5em;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 450px;
     }
 
     .describe form label {
@@ -65,6 +66,7 @@
     	color:#ffffff;
     	text-decoration:none;
     	text-shadow:0px 1px 0px #0a4457;
+      font-size: .9em;
     }
 
     button:hover {
@@ -145,10 +147,10 @@
     var DIGITS = 3;
     var answer, difficulty, wattage, time, solution, quantity = 1, units = "Hours",
       correct = 0, attempts = 0, problems = 0, tries = 0, steps = [], step = [];
-    var t1 = 'How many Kilowatts does a <span id="watts"></span> \
+    var t1 = 'How many Kilowatt Hours does a <span id="watts"></span> \
               Watt Lightbulb use in <span id="time"></span> \
               <span id="units"></span>?',
-        t3 = 'How many Kilowatts do <span id="quantity"></span> \
+        t3 = 'How many Kilowatts Hours do <span id="quantity"></span> \
               <span id="watts"></span> Watt Lightbulbs use in \
               <span id="time"></span> <span id="units"></span>?';
 
@@ -188,7 +190,7 @@
               if(item[1].indexOf('/') != -1){
                 bit += '<div class="divide">/</div>';
               } else if(item[1].indexOf('*') != -1) {
-                bit += '<div class="multiply">*</div>';
+                bit += '<div class="multiply">X</div>';
               }
             }else if (j==array2.length-2) {
               bit += '<div class="equals">=</div>';
@@ -485,7 +487,7 @@
         units += 's';
       }
       $('#units').text(units);
-      $('#time').text(stringifyNumber(time));
+      $('#time').text(time);
       return time;
     }
 
