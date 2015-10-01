@@ -114,6 +114,10 @@
       display: inline;
     }
 
+    .multiply {
+      text-transform: lowercase;
+    }
+
     #title.bit {
       display: block;
     }
@@ -138,7 +142,7 @@
     <button id="gen-question">Create<span id='type'></span>Question</button>
     <div class="question"></div>
     <div class="answer">
-      <input id="answer" type="number" step=".001" min="0"><span class="kw">Kilowatts</span></input>
+      <input id="answer" type="number" step=".001" min="0"><span class="kw">Kilowatt Hours</span></input>
     </div>
       <button id="submit">Submit</button>
       <button id="help">Show Steps</button>
@@ -150,7 +154,7 @@
     var t1 = 'How many Kilowatt Hours does a <span id="watts"></span> \
               Watt Lightbulb use in <span id="time"></span> \
               <span id="units"></span>?',
-        t3 = 'How many Kilowatts Hours do <span id="quantity"></span> \
+        t3 = 'How many Kilowatt Hours do <span id="quantity"></span> \
               <span id="watts"></span> Watt Lightbulbs use in \
               <span id="time"></span> <span id="units"></span>?';
 
@@ -188,9 +192,9 @@
           if(j>0){
             if (j<array2.length-2){
               if(item[1].indexOf('/') != -1){
-                bit += '<div class="divide">/</div>';
+                bit += '<div class="divide">&divide</div>';
               } else if(item[1].indexOf('*') != -1) {
-                bit += '<div class="multiply">X</div>';
+                bit += '<div class="multiply">x</div>';
               }
             }else if (j==array2.length-2) {
               bit += '<div class="equals">=</div>';
@@ -201,9 +205,9 @@
         if(note.length > 0){
           html = '<div class="note"">('+note+')</div>'+html;
         }
-        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>').hide().fadeIn(1000);
-
+        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>').hide().fadeIn(500);
       });
+      $('html, body').animate({scrollTop: $("footer").offset().top}, 1000);
     }
 
     function setAttemptedCompleted() {
@@ -230,6 +234,7 @@
       step = [];
       $( "input#answer" ).val('');
       $('.steps').remove();
+      $('html, body').animate({scrollTop: $('#submit').offset().top}, 500);
       problems++;
       tries = 0;
       setAttemptedCompleted();
@@ -263,7 +268,7 @@
 
     function genSolution() {
       solution = calcSolution(wattage, time);
-      step.push(['Answer', '=', solution]);
+      step.push(['Answer', '=', solution+' Kilowatt Hours']);
     }
 
     function convertTime(t) {
@@ -271,19 +276,19 @@
       switch(units) {
         case 'Days':
           r = 24 * t;
-          step.push(['Convert Days to Hours', '*', t, 24, r.toFixed(DIGITS)]);
+          step.push(['Convert Days to Hours', '*', t, 24, r.toFixed(DIGITS), '24 hours in a day']);
           break;
         case 'Weeks':
           r = 7 * 24 * t;
-          step.push(['Convert Weeks to Hours', '*', t, 7, 24, r.toFixed(DIGITS)]);
+          step.push(['Convert Weeks to Hours', '*', t, 7, 24, r.toFixed(DIGITS), '7 Days per Week']);
           break;
         case 'Months':
           r = 30 * 24 * t;
-          step.push(['Convert Months to Hours', '*', t, 30, 24, r.toFixed(DIGITS), 'Assume 30 days per month']);
+          step.push(['Convert Months to Hours', '*', t, 30, 24, r.toFixed(DIGITS), 'Use 30 days per month']);
           break;
         case 'Years':
           r = 365.25 * 24 * t;
-          step.push(['Convert Years to Hours', '*', t, 365.25, 24, r.toFixed(DIGITS), 'Approximate 365.25 days per year']);
+          step.push(['Convert Years to Hours', '*', t, 365.25, 24, r.toFixed(DIGITS), 'Use 365.25 days per year']);
           break;
         default:
           break;
@@ -503,11 +508,12 @@
         } else if (isSolutionPartOfAnswer()) {
           alert("So close! Did you convert Watts to Kilowatts?");
         } else {
-          alert('Your Answer is: '+answer+'\n The Answer is: '+solution+' KW');
+          alert('Your Answer is: '+answer+'\n The Answer is: '+solution+' Kilowatt Hours');
         }
       }
       setAttemptedCompleted();
     }
   </script>
+  <footer></footer>
 </body>
 </html>
