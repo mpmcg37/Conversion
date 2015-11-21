@@ -10,11 +10,20 @@
 
     .content, .step {
       text-align: center;
-      margin: auto;
+      margin: .5em;
       padding: .2em;
+      border-radius: .5em;
       border: .2em solid black;
       margin-left: 1.5em;
       margin-right: 1.5em;
+    }
+
+    .content, .step {
+      box-shadow: .3em .3em .1em #888888;
+    }
+
+    button#gen-question {
+      box-shadow: .1em .1em .1em #888888;
     }
 
     .question, .describe, .bit, .total {
@@ -23,9 +32,12 @@
     }
 
     .describe form{
-      border: .05em solid black;
+      border-radius: .5em;
+      box-shadow: inset 1em 1em .5em #eee;
+      background: #eee;
       font-size: .8em;
       padding: .2em;
+      margin: .2em;
       margin-left: auto;
       margin-right: auto;
       max-width: 450px;
@@ -85,14 +97,15 @@
     	top:1px;
     }
 
-    #answer, .kw, button, .bit, .equals, .multiply, .divide {
-      margin: .2em .3em;
+div#title {
+  text-decoration: underline;
+}
+
+    #answer, .kw, button, .bit, .equals, .multiply, .divide
+{
+      margin: .3em;
       padding:.1em .3em;
       font-size: 2.4em;
-    }
-
-    #submit {
-      margin: auto;
     }
 
     .answer {
@@ -109,6 +122,7 @@
     .answer span.kw {
       width: 30%;
     }
+
 
     .bit, .equals, .multiply, .divide {
       display: inline;
@@ -192,12 +206,12 @@
           if(j>0){
             if (j<array2.length-2){
               if(item[1].indexOf('/') != -1){
-                bit += '<div class="divide">&divide</div>';
+                bit += '</div><div class="divide">&divide';
               } else if(item[1].indexOf('*') != -1) {
-                bit += '<div class="multiply">x</div>';
+                bit += '</div><div class="multiply">x';
               }
             }else if (j==array2.length-2) {
-              bit += '<div class="equals">=</div>';
+              bit += '</div><div class="equals">=';
             }
           }
           html += '<div class="bit" id="'+ (j == 0 ? 'title' : j) +'"> ' +bit+ '</div>';
@@ -205,6 +219,7 @@
         if(note.length > 0){
           html = '<div class="note"">('+note+')</div>'+html;
         }
+        console.log(html);
         $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>').hide().fadeIn(500);
       });
       $('html, body').animate({scrollTop: $("footer").offset().top}, 1000);
