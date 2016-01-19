@@ -285,9 +285,9 @@ div#title {
           html = '<div class="note"">('+note+')</div>'+html;
         }
         console.log(html);
-        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>').hide().fadeIn(500);
+        $('.steps').append('<div class="step" id="'+i+'">'+html+'</div>').scrollTop(1000);
       });
-      $('html, body').animate({scrollTop: $("footer").offset().top}, 1000);
+      $('html, body').animate({scrollTop: $("footer").offset().top}, 2000);
     }
 
     function setAttemptedCompleted() {
