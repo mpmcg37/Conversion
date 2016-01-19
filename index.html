@@ -18,7 +18,12 @@
       margin-right: 1.5em;
     }
 
+    body {
+      background-color: cadetblue;
+    }
+
     .content, .step {
+      background-color: aliceblue;
       box-shadow: .3em .3em .1em #888888;
     }
 
@@ -41,6 +46,14 @@
       margin-left: auto;
       margin-right: auto;
       max-width: 450px;
+    }
+
+    .error {
+      background-color: #CF1020;
+    }
+
+    .pass {
+      background-color: #20CF10;
     }
 
     .describe form label {
@@ -97,12 +110,33 @@
     	top:1px;
     }
 
+    #calcCheckbox, #abbrCheckbox {
+
+        width: 45%;
+        max-width: 8em;
+      font-size: .5em;
+      display: inline;
+      text-align: left;
+    }
+
+    #calcCheckbox input,  #abbrCheckbox input{
+      width: 1em;
+    }
+
+    button.smallButton#keyButton {
+    }
+
+div#messages {
+  font-size: 2em;
+  text-align: center;
+  font-style: italic;
+}
+
 div#title {
   text-decoration: underline;
 }
 
-    #answer, .kw, button, .bit, .equals, .multiply, .divide
-{
+    #answer, answer .kw, button, .bit, .equals, .multiply, .divide {
       margin: .3em;
       padding:.1em .3em;
       font-size: 2.4em;
@@ -117,6 +151,14 @@ div#title {
     .answer input#answer {
       width: 50%;
       max-width: 5em;
+      border-radius: 15px;
+      text-decoration: underline;
+      text-align: center;
+    }
+
+    .answer input#answer:focus{
+      border-radius: 15px;
+
     }
 
     .answer span.kw {
@@ -138,22 +180,33 @@ div#title {
   </style>
 </head>
 <body>
+
   <div class="content">
+
     <div class="correct"></div>
+
     <div class="total"></div>
+
     <div class="describe">Select a difficulty
       <form>
-        <label for="1"><input type="radio" name="difficulty" id="1" value="Easy" checked />
+        <label for="1" title="One lightbulb questions over hours."><input type="radio" name="difficulty" id="1" value="Easy" checked />
         Easy</label>
-        <label for="2">
+        <label for="2" title="Multiple lightbulb questions over hours.">
         <input type="radio" name="difficulty" id="2" value="Medium" />
         Medium</label>
-        <label for="3">
+        <label for="3" title="Multiple lightbulb questions over days, weeks, months, and years.">
         <input type="radio" name="difficulty" id="3" value="Hard" />
         Hard</label>
+        <!--<label id="calcCheckbox" title="Show onscreen calculator.">
+        <input type="checkbox" name="calculator" value="calculator" id="calcCheckbox">Show Calculator</label>-->
+        <label id="abbrCheckbox" title="Show kilowatt-hour as kWh.">
+        <input type="checkbox" name="abbr" value="abbr" id="abbrCheckbox">Show Abbreviation</label>
       </form>
     </div>
+
     <button id="gen-question">Create<span id='type'></span>Question</button>
+    <div id="messages">Remember there are 24 hours in a day, 7 days in a week, 30 days in a month, 365 days in year, and 1000 watts in a kilowatt.</div>
+
     <div class="question"></div>
     <div class="answer">
       <input id="answer" type="number" step=".001" min="0"><span class="kw">Kilowatt Hours</span></input>
@@ -163,21 +216,31 @@ div#title {
   </div>
   <script>
     var DIGITS = 3;
+    var showAbbr = false;
+    var passedAnswers = [];
     var answer, difficulty, wattage, time, solution, quantity = 1, units = "Hours",
       correct = 0, attempts = 0, problems = 0, tries = 0, steps = [], step = [];
-    var t1 = 'How many Kilowatt Hours does a <span id="watts"></span> \
+    var t1 = 'How many <span class="kw">Kilowatt Hours</span> does a <span id="watts"></span> \
               Watt Lightbulb use in <span id="time"></span> \
               <span id="units"></span>?',
-        t3 = 'How many Kilowatt Hours do <span id="quantity"></span> \
+        t3 = 'How many <span class="kw">Kilowatt Hours</span> do <span id="quantity"></span> \
               <span id="watts"></span> Watt Lightbulbs use in \
               <span id="time"></span> <span id="units"></span>?';
 
     $(function() {
       $( "#gen-question" ).click(genQuestion);
       $('#help').click(showSteps);
+      $('#submit').hide();
+      $('#answer').hide();
+      $('span.kw').hide();
       $( "#submit" ).click(getAnswer);
       $('input:radio[name=difficulty]').click(function() {
         $('#type').text(getDifficulty());
+      });
+      $('#abbrCheckbox').change(
+        function(){
+          showAbbr = !showAbbr;
+          $('span.kw').text(getKWHText());
       });
       $('#type').text(getDifficulty());
       $( "input#answer" ).keyup(function(e) {
@@ -187,6 +250,8 @@ div#title {
       });
       setAttemptedCompleted();
     });
+
+    function getKWHText(){ return showAbbr ? "kWh" : "Kilowatt Hour"; }
 
     function showSteps(){
       $('#help').toggle();
@@ -247,6 +312,12 @@ div#title {
 
     function genQuestion() {
       step = [];
+      $('#submit').show();
+      $('#answer').show();
+      $('span.kw').show();
+      setTimeout(function() {
+        $('div#messages').slideUp(1000);
+      }, 3000);
       $( "input#answer" ).val('');
       $('.steps').remove();
       $('html, body').animate({scrollTop: $('#submit').offset().top}, 500);
@@ -283,7 +354,7 @@ div#title {
 
     function genSolution() {
       solution = calcSolution(wattage, time);
-      step.push(['Answer', '=', solution+' Kilowatt Hours']);
+      step.push(['Answer', '=', solution+getKWHText()]);
     }
 
     function convertTime(t) {
@@ -291,19 +362,19 @@ div#title {
       switch(units) {
         case 'Days':
           r = 24 * t;
-          step.push(['Convert Days to Hours', '*', t, 24, r.toFixed(DIGITS), '24 hours in a day']);
+          step.push(['Convert Hours to Days', '*', t, 24, r.toFixed(DIGITS), '24 hours in a day']);
           break;
         case 'Weeks':
           r = 7 * 24 * t;
-          step.push(['Convert Weeks to Hours', '*', t, 7, 24, r.toFixed(DIGITS), '7 Days per Week']);
+          step.push(['Convert Hours to Weeks', '*', t, 7, 24, r.toFixed(DIGITS), '7 Days per Week']);
           break;
         case 'Months':
           r = 30 * 24 * t;
-          step.push(['Convert Months to Hours', '*', t, 30, 24, r.toFixed(DIGITS), 'Use 30 days per month']);
+          step.push(['Convert Hours to Months', '*', t, 24, 30, r.toFixed(DIGITS), 'Use 30 days per month']);
           break;
         case 'Years':
-          r = 365.25 * 24 * t;
-          step.push(['Convert Years to Hours', '*', t, 365.25, 24, r.toFixed(DIGITS), 'Use 365.25 days per year']);
+          r = 365 * 24 * t;
+          step.push(['Convert Hours to Years', '*', t, 24, 365, r.toFixed(DIGITS), 'Use 365 days per year']);
           break;
         default:
           break;
@@ -513,19 +584,45 @@ div#title {
 
     function isSolutionPartOfAnswer(){ return answer.toString().replace('.','').indexOf((solution*1000).toString()) != -1; }
 
+    function compliment(){
+      return "Good Job";
+    }
+
+    function error(){
+      return "Not Quite";
+    }
+
+
+
     function showSolution() {
       if(solution && answer) {
         steps.push(step);
-        attempts++; tries++;
+        attempts++;
+        $('div#messages').hide();
+        if(passedAnswers.length == 0) { tries++; }
+        passedAnswers.push(answer);
         if(solution == answer) {
           correct++;
+          $('div#messages').text(compliment()).addClass("pass").fadeIn(1000);
           $( "#gen-question" ).click();
+          passedAnswers = [];
         } else if (isSolutionPartOfAnswer()) {
-          alert("So close! Did you convert Watts to Kilowatts?");
+          setTimeout(function() {
+            $('div#messages').slideUp(1000);
+          }, 3000);
+          $('div#messages').text("So close! Did you convert Watts to Kilowatts?").addClass("error").fadeIn(1000);
         } else {
-          alert('Your Answer is: '+answer+'\n The Answer is: '+solution+' Kilowatt Hours');
+          setTimeout(function() {
+            $('div#messages').slideUp(1000);
+          }, 3000);
+          $('div#messages').text(error()).addClass("error").fadeIn(1000);
         }
       }
+
+      setTimeout(function() {
+        $('div#messages').removeClass("error");
+        $('div#messages').removeClass("pass");
+      }, 2000);
       setAttemptedCompleted();
     }
   </script>
