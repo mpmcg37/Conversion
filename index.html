@@ -328,10 +328,13 @@ div#title {
       switch(difficulty) {
         case 'Easy':
           $('.question').html(t1);
+          quantity = 1;
+          units = "Hours";
           break;
         case 'Medium':
           $('.question').html(t3);
           randomQuantity();
+          units = "Hours";
           break;
         case 'Hard':
           $('.question').html(t3);
