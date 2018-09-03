@@ -1,165 +1,162 @@
-* { font-family: 'Open Sans', sans-serif; }
+* {
+    font-family: 'Open Sans', sans-serif;
+}
 
 .content, .step {
-  text-align: center;
-  margin: .5em;
-  padding: .2em;
-  border-radius: .5em;
-  border: .2em solid black;
-  margin-left: 1.5em;
-  margin-right: 1.5em;
+    text-align: center;
+    padding: .2em;
+    border-radius: .5em;
+    border: .2em solid black;
+    margin: .5em 1.5em;
 }
 
 body {
-  background-color: cadetblue;
+    background-color: cadetblue;
 }
 
 .content, .step {
-  background-color: aliceblue;
-  box-shadow: .3em .3em .1em #888888;
+    background-color: aliceblue;
+    box-shadow: .3em .3em .1em #888888;
 }
 
 button#gen-question {
-  box-shadow: .1em .1em .1em #888888;
+    box-shadow: .1em .1em .1em #888888;
 }
 
 .question, .describe, .bit, .total {
-  text-transform: capitalize;
-  font-size: 3em;
+    text-transform: capitalize;
+    font-size: 3em;
 }
 
-.describe form{
-  border-radius: .5em;
-  box-shadow: inset 1em 1em .5em #eee;
-  background: #eee;
-  font-size: .8em;
-  padding: .2em;
-  margin: .2em;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 450px;
+.describe form {
+    border-radius: .5em;
+    box-shadow: inset 1em 1em .5em #eee;
+    background: #eee;
+    font-size: .8em;
+    padding: .2em;
+    margin: .2em auto;
+    max-width: 450px;
 }
 
 .error {
-  background-color: #CF1020;
+    background-color: #CF1020;
 }
 
 .pass {
-  background-color: #20CF10;
+    background-color: #20CF10;
 }
 
 .describe form label {
-  display: block;
+    display: block;
 }
 
 .total {
-  text-decoration: underline;
-  font-size: 2.7em;
+    text-decoration: underline;
+    font-size: 2.7em;
 }
 
 .note {
-  font-size: .9em;
-  font-style: italic;
+    font-size: .9em;
+    font-style: italic;
 }
 
 button {
-  -moz-box-shadow: 0px 0px 0px 0px #6b8f94;
-  -webkit-box-shadow: 0px 0px 0px 0px #6b8f94;
-  box-shadow: 0px 0px 0px 0px #6b8f94;
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3bbceb), color-stop(1, #2f3233));
-  background:-moz-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
-  background:-webkit-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
-  background:-o-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
-  background:-ms-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
-  background:linear-gradient(to bottom, #3bbceb 5%, #2f3233 100%);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3bbceb', endColorstr='#2f3233',GradientType=0);
-  background-color:#3bbceb;
-  -moz-border-radius:28px;
-  -webkit-border-radius:28px;
-  border-radius:28px;
-  border:1px solid #1c70a8;
-  cursor:pointer;
-  color:#ffffff;
-  text-decoration:none;
-  text-shadow:0px 1px 0px #0a4457;
-  font-size: .9em;
+    -moz-box-shadow: 0px 0px 0px 0px #6b8f94;
+    -webkit-box-shadow: 0px 0px 0px 0px #6b8f94;
+    box-shadow: 0px 0px 0px 0px #6b8f94;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3bbceb), color-stop(1, #2f3233));
+    background: -moz-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    background: -webkit-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    background: -o-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    background: -ms-linear-gradient(top, #3bbceb 5%, #2f3233 100%);
+    background: linear-gradient(to bottom, #3bbceb 5%, #2f3233 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3bbceb', endColorstr='#2f3233', GradientType=0);
+    background-color: #3bbceb;
+    -moz-border-radius: 28px;
+    -webkit-border-radius: 28px;
+    border-radius: 28px;
+    border: 1px solid #1c70a8;
+    cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #0a4457;
+    font-size: .9em;
 }
 
 button:hover {
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2f3233), color-stop(1, #3bbceb));
-  background:-moz-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
-  background:-webkit-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
-  background:-o-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
-  background:-ms-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
-  background:linear-gradient(to bottom, #2f3233 5%, #3bbceb 100%);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2f3233', endColorstr='#3bbceb',GradientType=0);
-  background-color:#2f3233;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2f3233), color-stop(1, #3bbceb));
+    background: -moz-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    background: -webkit-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    background: -o-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    background: -ms-linear-gradient(top, #2f3233 5%, #3bbceb 100%);
+    background: linear-gradient(to bottom, #2f3233 5%, #3bbceb 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2f3233', endColorstr='#3bbceb', GradientType=0);
+    background-color: #2f3233;
 }
 
 button:active {
-  position:relative;
-  top:1px;
+    position: relative;
+    top: 1px;
 }
 
 #calcCheckbox, #abbrCheckbox {
     width: 45%;
     max-width: 8em;
-  font-size: .5em;
-  display: inline;
-  text-align: left;
+    font-size: .5em;
+    display: inline;
+    text-align: left;
 }
 
-#calcCheckbox input,  #abbrCheckbox input{
-  width: 1em;
-}
-
-button.smallButton#keyButton {
+#calcCheckbox input, #abbrCheckbox input {
+    width: 1em;
 }
 
 div#messages {
-font-size: 2em;
-text-align: center;
-font-style: italic;
+    font-size: 2em;
+    text-align: center;
+    font-style: italic;
 }
 
 div#title {
-text-decoration: underline;
+    text-decoration: underline;
 }
-#answer, answer .kw, button, .bit, .equals, .multiply, .divide {
-  margin: .3em;
-  padding:.1em .3em;
-  font-size: 2.4em;
+
+#answer, .answer .kw, button, .bit, .equals, .multiply, .divide {
+    margin: .3em;
+    padding: .1em .3em;
+    font-size: 2.4em;
 }
 
 .answer {
-  width: 95%;
-  display: block;
-  margin: auto;
+    width: 95%;
+    display: block;
+    margin: auto;
 }
 
 .answer input#answer {
-  width: 50%;
-  max-width: 5em;
-  border-radius: 15px;
-  text-decoration: underline;
-  text-align: center;
+    width: 50%;
+    max-width: 5em;
+    border-radius: 15px;
+    text-decoration: underline;
+    text-align: center;
 }
 
-.answer input#answer:focus{
-  border-radius: 15px;
+.answer input#answer:focus {
+    border-radius: 15px;
 }
 
 .answer span.kw {
-  width: 30%;
+    width: 30%;
 }
+
 .bit, .equals, .multiply, .divide {
-  display: inline;
+    display: inline;
 }
 
 .multiply {
-  text-transform: lowercase;
+    text-transform: lowercase;
 }
 
 #title.bit {
-  display: block;
+    display: block;
 }
