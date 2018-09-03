@@ -1,46 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  <meta charset="UTF-8">
-  <title>Energy Conversion</title>
-  <link rel="stylesheet" href="index.css" type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <meta charset="UTF-8">
+    <title>Energy Conversion</title>
+    <link rel="stylesheet" href="index.css" type='text/css'>
 </head>
 <body>
 
-  <div class="content">
+<div class="content">
 
     <div class="correct"></div>
 
     <div class="total"></div>
 
     <div class="describe">Select a difficulty
-      <form>
-        <label for="1" title="One lightbulb questions over hours."><input type="radio" name="difficulty" id="1" value="Easy" checked />
-        Easy</label>
-        <label for="2" title="Multiple lightbulb questions over hours.">
-        <input type="radio" name="difficulty" id="2" value="Medium" />
-        Medium</label>
-        <label for="3" title="Multiple lightbulb questions over days, weeks, months, and years.">
-        <input type="radio" name="difficulty" id="3" value="Hard" />
-        Hard</label>
-        <label id="abbrCheckbox" title="Show kilowatt-hour as kWh.">
-        <input type="checkbox" name="abbr" value="abbr" id="abbrCheckbox">Show Abbreviation</label>
-      </form>
+        <form>
+            <label for="1" title="One lightbulb questions over hours.">
+                <input type="radio" name="difficulty" id="1" value="Easy" checked/>
+                Easy
+            </label>
+            <label for="2" title="Multiple lightbulb questions over hours.">
+                <input type="radio" name="difficulty" id="2" value="Medium"/>
+                Medium
+            </label>
+            <label for="3" title="Multiple lightbulb questions over days, weeks, months, and years.">
+                <input type="radio" name="difficulty" id="3" value="Hard"/>
+                Hard
+            </label>
+            <label id="abbrCheckbox" for="abbrCheckboxInput" title="Show kilowatt-hour as kWh.">
+                <input type="checkbox" name="abbr" value="abbr" id="abbrCheckboxInput">
+                Show Abbreviation
+            </label>
+        </form>
     </div>
 
-    <button id="gen-question">Create<span id='type'></span>Question</button>
-    <div id="messages">Remember there are 24 hours in a day, 7 days in a week, 30 days in a month, 365 days in year, and 1000 watts in a kilowatt.</div>
+    <button id="gen-question">
+        Create<span id='type'></span>Question
+    </button>
+    <div id="messages">Remember there are 24 hours in a day, 7 days in a week, 30 days in a month, 365 days in year,
+        and 1000 watts in a kilowatt.
+    </div>
 
     <div class="question"></div>
     <div class="answer">
-      <input id="answer" type="number" step=".001" min="0"><span class="kw">Kilowatt Hours</span></input>
+        <label for="answer">
+            <input id="answer" type="number" step=".001" min="0"><span class="kw">Kilowatt Hours</span></label>
     </div>
-      <button id="submit">Submit</button>
-      <button id="help">Show Steps</button>
-  </div>
-  <script src="index.js"></script>
-  <footer></footer>
+    <button id="submit">Submit</button>
+    <button id="help">Show Steps</button>
+</div>
+<script src="Utils.js"></script>
+<script src="Display.js"></script>
+<script src="index.js"></script>
+<footer></footer>
 </body>
 </html>
