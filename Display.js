@@ -6,7 +6,7 @@ var Display = function() {
           Watt Lightbulb use in <span id="time"></span> \
           <span id="units"></span>?';
 
-    var difficultQuestion = 'How many <span class="kw">Kilowatt Hours</span> do <span id="quantity"></span> \
+    var difficultQuestion = 'How many <span class="kw">Kilowatt Hours</span> do <span id="quantity"></span> number of \
           <span id="watts"></span> Watt Lightbulbs use in \
           <span id="time"></span> <span id="units"></span>?';
 
